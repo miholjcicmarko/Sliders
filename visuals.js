@@ -71,8 +71,15 @@ class visuals {
         }
     }
 
-    drawBars (number) {
-        
+    drawBars (number, newBars) {
+        if (newBars === true) {
+            let divBar = document.getElementById("bar")
+            while (divBar.firstChild) {
+                divBar.removeChild(divBar.firstChild);
+            }
+        }
+
+
         let dataBar = [];
 
         for (let i = 0; i < this.dataValues.length; i++) {
