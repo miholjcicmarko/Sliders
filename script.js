@@ -23,6 +23,6 @@ Promise.all([preProcessData]).then(data => {
 
     let bars = new visuals(preData, updateNumber);
 
-    bars.drawBars();
+    bars.drawBars(1);
 
 })

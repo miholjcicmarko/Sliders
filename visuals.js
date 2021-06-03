@@ -70,7 +70,9 @@ class visuals {
         }
     }
 
-    drawBars () {
+    drawBars (number) {
+        
+
         
     }
 
