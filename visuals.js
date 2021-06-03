@@ -91,63 +91,73 @@ class visuals {
         
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
-        let barpadding = 1;
 
+        let var_id = "numberOfSwipes";
+        let that = this;
 
+        let xlargeScale = d3.scaleBand()
+                .domain(array_of_variable_objects.map(d => d[var_id]))
+                .range([margin.left, w - margin.right])
+                .paddingInner(0.5);
 
-
-
-        let x_lab = d3.scaleBand()
-                        .domain(["Zions", "Others"])
-                        .range([0,w-5])
+        let xcatsScale = d3.scaleBand()
+                .domain(that.chosenIDs)
+                .range([0, xlargeScale.bandwidth()])
+                .paddingInner(0.5);
 
         let yScale = d3.scaleLinear()
-            .domain([d3.max([dataBar[0]["zions"], dataBar[0]["others"]]),0])
-            .range([0,h-5]);
+                .domain([d3.max([dataBar[0]["zions"], dataBar[0]["others"]]),0])
+                .range([0,h-5]);
 
-        let svg = d3.select("#bars")
-            .append("svg")
-            .classed("plot-svg", true)
-            .attr("id", "bars")
-            .attr("width", w + margin.right + margin.left)
-            .attr("height", h + margin.top + margin.bottom);
-
-        svg.selectAll("rect")
+        svg.append("g")
+            .selectAll("g")
             .data(dataBar)
-            .enter()
-            .append("rect")
-            .attr("x", function (d,i) {
-                return i * (w/state_data.length)
-            })
+            .join("g")
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
+            .selectAll("rect")
+            .data(d => that.chosenIDs.map(key => ({key, value: d[key], variable_name: d["var"]})))
+            .join("rect")
+            .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
-                return yScale(d);
+               return yScale(d.value);
             })
-            .attr("width", w/state_data.length - barpadding)
-            .attr("height", function(d) {
-                return h-yScale(d);
+            .attr("width", xcatsScale.bandwidth())
+            .attr("height", function(d,i) {
+               return yScale(0) - yScale(d.value);
             })
-            .attr("fill","pink")
-            .attr("transform", "translate(" + 3*margin.left +
-            "," + 0+")");
+            .attr("fill", "steelblue")
+            .attr("id", (d,i) => d.key+"");
     
         let yaxis = svg.append("g")
                     .attr("id", "y-axis");
         
-            yaxis.append("text")
+        yaxis.append("text")
                 .attr("class", "axis-label")
                 .attr("transform", "translate(" + 0
                     + "," + 0)
                 .attr("text-anchor", "middle")
                 .attr("class", "y-label");
         
-            yaxis.call(d3.axisLeft(yScale).ticks(5))
+        yaxis.call(d3.axisLeft(yScale).ticks(3))
                 .attr("transform", "translate(" + 3*margin.left + "," + "5)")
                 .attr("class", "axis_line");
 
         let xaxis = svg.append("g")
                     .attr("id", "x-axis")
                     .attr("transform", "translate(" +3*margin.left+ "," +h+")")
-                    .call(d3.axisBottom(x_lab));
+                    .call(d3.axisBottom(xcatsScale));
+                       
+        let yaxis = svg.append("g")
+                        .attr("id", "y-axis" + i);
+
+        let that = this;
+
+        yaxis.call(d3.axisLeft(yScale).ticks(3))
+                .attr("transform", "translate(" + (30) + ",0)")
+                .attr("class", "axis_line");
+
+        
+
 
     }
 
