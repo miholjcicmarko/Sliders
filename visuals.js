@@ -148,12 +148,6 @@ class visuals {
         let yaxis = svg.append("g")
                     .attr("id", "y-axis");
         
-        yaxis.append("text")
-                .attr("class", "axis-label")
-                .attr("transform", "translate(0, 0)")
-                .attr("text-anchor", "middle")
-                .attr("class", "y-label");
-        
         yaxis.call(d3.axisLeft(yScale).ticks(5))
                 .attr("transform", "translate(" + 50 + "," + "5)")
                 .attr("class", "axis_line");
@@ -162,6 +156,11 @@ class visuals {
                     .attr("id", "x-axis")
                     .attr("transform", "translate(" +50+ "," +(h-5)+")")
                     .call(d3.axisBottom(xcatsScale));
+
+        svg.append("text")
+                .text("Cost ($)")
+                .attr("transform", "translate(15,"+(h/2)+")rotate(-90)")
+                .attr("text-anchor", "middle");
 
         let bars = d3.selectAll("#bar").selectAll("rect");
 
