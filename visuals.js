@@ -16,11 +16,13 @@ class visuals {
         this.updateNumber = updateNumber;
         this.slider = false;
         this.dataValues = [];
+        this.amountList = [];
 
         for (let i = 0; i < this.data.length; i++) {
             let node = new DataClass(this.data[i].num_swipes, this.data[i].Zions,
                 this.data[i].Others);
             this.dataValues.push(node);
+            this.amountList.push(i);
         }
 
     }

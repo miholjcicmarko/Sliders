@@ -21,6 +21,5 @@ Promise.all([preProcessData]).then(data => {
         bars.updateChart(number);
     }
 
-
     let bars = new visuals(preData, updateNumber);
 })
