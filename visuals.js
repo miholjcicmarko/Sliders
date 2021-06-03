@@ -72,6 +72,7 @@ class visuals {
     }
 
     drawBars (number, newBars) {
+
         if (newBars === true) {
             let divBar = document.getElementById("bar")
             while (divBar.firstChild) {
@@ -103,12 +104,11 @@ class visuals {
         let xlargeScale = d3.scaleBand()
                 .domain(dataBar.map(d => d[var_id]))
                 .range([margin.left, w - margin.right])
-                .paddingInner(0.5);
 
         let xcatsScale = d3.scaleBand()
                 .domain(["Zions", "Others"])
                 .range([0, xlargeScale.bandwidth()])
-                .paddingInner(0.5);
+                .paddingInner(0.1);
 
         let yScale = d3.scaleLinear()
                 .domain([d3.max([dataBar[0]["Zions"], dataBar[0]["Others"]])+20,0])
@@ -124,11 +124,11 @@ class visuals {
             .selectAll("g")
             .data(dataBar)
             .join("g")
-            .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])+30},5)`)
             .selectAll("rect")
             .data(d => that.companies.map(key => ({key, value: d[key], variable_name: d["var"]})))
             .join("rect")
-            .attr("x", d => xcatsScale(d.key) + 5)
+            .attr("x", d => xcatsScale(d.key))
             .attr("y", function(d,i) {
                return yScale(d.value);
             })
@@ -148,13 +148,13 @@ class visuals {
                 .attr("text-anchor", "middle")
                 .attr("class", "y-label");
         
-        yaxis.call(d3.axisLeft(yScale).ticks(3))
-                .attr("transform", "translate(" + 30 + "," + "0)")
+        yaxis.call(d3.axisLeft(yScale).ticks(5))
+                .attr("transform", "translate(" + 50 + "," + "5)")
                 .attr("class", "axis_line");
 
         let xaxis = svg.append("g")
                     .attr("id", "x-axis")
-                    .attr("transform", "translate(" +3*margin.left+ "," +h+")")
+                    .attr("transform", "translate(" +50+ "," +(h-10)+")")
                     .call(d3.axisBottom(xcatsScale));
 
     }
