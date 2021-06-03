@@ -121,7 +121,7 @@ class visuals {
                 .attr("width", w + margin.right + margin.left)
                 .attr("height", h + margin.top + margin.bottom);
 
-        d3.select('#bars')
+        d3.select('#bar')
             .append('div')
             .attr("class", "tooltip")
             .style("opacity", 0);
@@ -187,8 +187,8 @@ class visuals {
 
         onscreenData.on('mouseover', function(d,i) {
 
-            let pageX = d.clientX + 15;
-            let pageY = d.clientY + 15;
+            let pageX = d.clientX + 5;
+            let pageY = d.clientY + 5;
             
             d3.select(this).classed("hovered",true);
 
@@ -216,7 +216,7 @@ class visuals {
 
         return "<h5>" + company + "<br/>" + 
             "Cost: $" + cost;
-            
+
     }    
 
 }
