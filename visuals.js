@@ -71,9 +71,75 @@ class visuals {
     }
 
     drawBars (number) {
-        
 
+        d3.selectAll("#bars").remove();
+
+        let dataBar = [];
+
+        for (let i = 0; i < this.dataValues.length; i++) {
+            if (this.dataValues[i]["numberOfSwipes"] === number) {
+                dataBar.push(this.dataValues[i]);
+            }
+        }
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+        let barpadding = 1;
+
+        let x_lab = d3.scaleBand()
+                        .domain(["Zions", "Others"])
+                        .range([0,w-5])
+
+        let yScale = d3.scaleLinear()
+            .domain([d3.max([dataBar[0]["zions"], dataBar[0]["others"]]),0])
+            .range([0,h-5]);
+
+        let svg = d3.select("#bars")
+            .append("svg")
+            .classed("plot-svg", true)
+            .attr("id", "bars")
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
+
+        svg.selectAll("rect")
+            .data(dataBar)
+            .enter()
+            .append("rect")
+            .attr("x", function (d,i) {
+                return i * (w/state_data.length)
+            })
+            .attr("y", function(d,i) {
+                return yScale(d);
+            })
+            .attr("width", w/state_data.length - barpadding)
+            .attr("height", function(d) {
+                return h-yScale(d);
+            })
+            .attr("fill","pink")
+            .attr("transform", "translate(" + 3*margin.left +
+            "," + 0+")");
+    
+        let yaxis = svg.append("g")
+                    .attr("id", "y-axis");
+        
+            yaxis.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "translate(" + 0
+                    + "," + 0)
+                .attr("text-anchor", "middle")
+                .attr("class", "y-label");
+        
+            yaxis.call(d3.axisLeft(yScale).ticks(5))
+                .attr("transform", "translate(" + 3*margin.left + "," + "5)")
+                .attr("class", "axis_line");
+
+        let xaxis = svg.append("g")
+                    .attr("id", "x-axis")
+                    .attr("transform", "translate(" +3*margin.left+ "," +h+")")
+                    .call(d3.axisBottom(x_lab));
+
     }
 
     updateChart (number) {
