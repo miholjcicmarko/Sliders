@@ -79,7 +79,6 @@ class visuals {
             }
         }
 
-
         let dataBar = [];
 
         for (let i = 0; i < this.dataValues.length; i++) {
@@ -112,7 +111,7 @@ class visuals {
                 .paddingInner(0.5);
 
         let yScale = d3.scaleLinear()
-                .domain([d3.max([dataBar[0]["Zions"], dataBar[0]["Others"]]),0])
+                .domain([d3.max([dataBar[0]["Zions"], dataBar[0]["Others"]])+20,0])
                 .range([0,h-5]);
 
         let svg = d3.select("#bar")
@@ -169,7 +168,7 @@ class visuals {
 
         let new_num = +number;
 
-        this.drawBars(new_num);
+        this.drawBars(new_num, true);
 
     }
 
