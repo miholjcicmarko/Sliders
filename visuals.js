@@ -25,6 +25,16 @@ class visuals {
             this.amountList.push(i);
         }
 
+        this.drawYearBar(updateNumber);
+
+    }
+
+    drawYearBar (updateNumber) {
+
+    }
+
+    drawBars () {
+        
     }
 
 }
