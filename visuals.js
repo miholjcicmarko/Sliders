@@ -216,6 +216,7 @@ class visuals {
 
         return "<h5>" + company + "<br/>" + 
             "Cost: $" + cost;
+            
     }    
 
 }
