@@ -18,6 +18,7 @@ class visuals {
         this.dataValues = [];
         this.amountList = [];
         this.companies = ["Zions", "Others"];
+        this.activeNumber = 1;
 
         for (let i = 0; i < this.data.length; i++) {
             let node = new DataClass(this.data[i].num_swipes, this.data[i].Zions,
@@ -112,7 +113,7 @@ class visuals {
 
         let yScale = d3.scaleLinear()
                 .domain([d3.max([dataBar[0]["Zions"], dataBar[0]["Others"]])+20,0])
-                .range([0,h-5]);
+                .range([0,h-10]);
 
         let svg = d3.select("#bar")
                 .append("svg")
@@ -154,8 +155,13 @@ class visuals {
 
         let xaxis = svg.append("g")
                     .attr("id", "x-axis")
-                    .attr("transform", "translate(" +50+ "," +(h-10)+")")
+                    .attr("transform", "translate(" +50+ "," +(h-5)+")")
                     .call(d3.axisBottom(xcatsScale));
+
+        d3.select('#bar')
+                .append('div')
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
     }
 
@@ -171,5 +177,35 @@ class visuals {
         this.drawBars(new_num, true);
 
     }
+
+    tooltip (onscreenData) {
+        let that = this;
+        let tooltip = d3.select('.tooltip');
+
+        onscreenData.on('mouseover', function(d,i) {
+
+            let pageX = d.clientX + 15;
+            let pageY = d.clientY + 15;
+            
+            d3.select(this).classed("hovered",true);
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+        
+            tooltip.html(that.tooltipDivRender(d))
+                .style("left", (pageX) + "px")
+                .style("top", (pageY) + "px");
+            });
+
+        onscreenData.on("mouseout", function(d,i) {
+            d3.select(this).classed("hovered",false);
+
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    }
+
 
 }
