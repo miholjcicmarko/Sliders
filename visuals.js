@@ -17,6 +17,7 @@ class visuals {
         this.slider = false;
         this.dataValues = [];
         this.amountList = [];
+        this.companies = ["Zions", "Others"];
 
         for (let i = 0; i < this.data.length; i++) {
             let node = new DataClass(this.data[i].num_swipes, this.data[i].Zions,
@@ -71,17 +72,15 @@ class visuals {
     }
 
     drawBars (number) {
-
-        d3.selectAll("#bars").remove();
-
+        
         let dataBar = [];
 
         for (let i = 0; i < this.dataValues.length; i++) {
             if (this.dataValues[i]["numberOfSwipes"] === number) {
                 let node = {
-                    "NumberOfSwipes": i,
+                    "numberOfSwipes": i,
                     "Zions": this.dataValues[i]["zions"],
-                    "Others": this.dataValues[i]["others"]
+                    "Others": this.dataValues[i]["other"]
                 };
                 dataBar.push(node);
             }
@@ -96,18 +95,24 @@ class visuals {
         let that = this;
 
         let xlargeScale = d3.scaleBand()
-                .domain(array_of_variable_objects.map(d => d[var_id]))
+                .domain(dataBar.map(d => d[var_id]))
                 .range([margin.left, w - margin.right])
                 .paddingInner(0.5);
 
         let xcatsScale = d3.scaleBand()
-                .domain(that.chosenIDs)
+                .domain(["Zions", "Others"])
                 .range([0, xlargeScale.bandwidth()])
                 .paddingInner(0.5);
 
         let yScale = d3.scaleLinear()
-                .domain([d3.max([dataBar[0]["zions"], dataBar[0]["others"]]),0])
+                .domain([d3.max([dataBar[0]["Zions"], dataBar[0]["Others"]]),0])
                 .range([0,h-5]);
+
+        let svg = d3.select("#bar")
+                .append("svg")
+                .attr("id", "bars")
+                .attr("width", w + margin.right + margin.left)
+                .attr("height", h + margin.top + margin.bottom);
 
         svg.append("g")
             .selectAll("g")
@@ -115,7 +120,7 @@ class visuals {
             .join("g")
             .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
             .selectAll("rect")
-            .data(d => that.chosenIDs.map(key => ({key, value: d[key], variable_name: d["var"]})))
+            .data(d => that.companies.map(key => ({key, value: d[key], variable_name: d["var"]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
@@ -133,31 +138,18 @@ class visuals {
         
         yaxis.append("text")
                 .attr("class", "axis-label")
-                .attr("transform", "translate(" + 0
-                    + "," + 0)
+                .attr("transform", "translate(0, 0)")
                 .attr("text-anchor", "middle")
                 .attr("class", "y-label");
         
         yaxis.call(d3.axisLeft(yScale).ticks(3))
-                .attr("transform", "translate(" + 3*margin.left + "," + "5)")
+                .attr("transform", "translate(" + 30 + "," + "0)")
                 .attr("class", "axis_line");
 
         let xaxis = svg.append("g")
                     .attr("id", "x-axis")
                     .attr("transform", "translate(" +3*margin.left+ "," +h+")")
                     .call(d3.axisBottom(xcatsScale));
-                       
-        let yaxis = svg.append("g")
-                        .attr("id", "y-axis" + i);
-
-        let that = this;
-
-        yaxis.call(d3.axisLeft(yScale).ticks(3))
-                .attr("transform", "translate(" + (30) + ",0)")
-                .attr("class", "axis_line");
-
-        
-
 
     }
 
@@ -168,7 +160,9 @@ class visuals {
 
         d3.selectAll("#tooltip").remove();
 
-        this.drawBars(number);
+        let new_num = +number;
+
+        this.drawBars(new_num);
 
     }
 
