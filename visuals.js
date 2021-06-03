@@ -37,7 +37,7 @@ class visuals {
 
         let amountScale = d3.scaleLinear()
                             .domain([0, 999])
-                            .range([90, 200]);
+                            .range([5, 110]);
         
         let amountSlider = d3.select('#slider')
             .append('div').classed('slider-wrap', true)
@@ -121,13 +121,18 @@ class visuals {
                 .attr("width", w + margin.right + margin.left)
                 .attr("height", h + margin.top + margin.bottom);
 
+        d3.select('#bars')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
         svg.append("g")
             .selectAll("g")
             .data(dataBar)
             .join("g")
             .attr("transform", d => `translate(${xlargeScale(d[var_id])+30},5)`)
             .selectAll("rect")
-            .data(d => that.companies.map(key => ({key, value: d[key], variable_name: d["var"]})))
+            .data(d => that.companies.map(key => ({key, value: d[key]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key))
             .attr("y", function(d,i) {
@@ -158,11 +163,9 @@ class visuals {
                     .attr("transform", "translate(" +50+ "," +(h-5)+")")
                     .call(d3.axisBottom(xcatsScale));
 
-        d3.select('#bar')
-                .append('div')
-                .attr("class", "tooltip")
-                .style("opacity", 0);
+        let bars = d3.selectAll("#bar").selectAll("rect");
 
+        this.tooltip(bars);
     }
 
     updateChart (number) {
@@ -170,7 +173,7 @@ class visuals {
 
         this.shotData = this.resetData;
 
-        d3.selectAll("#tooltip").remove();
+        d3.selectAll(".tooltip").remove();
 
         let new_num = +number;
 
@@ -207,5 +210,12 @@ class visuals {
         });
     }
 
+    tooltipDivRender (data){
+        let company = data.currentTarget.id;
+        let cost = data.currentTarget.__data__.value;
+
+        return "<h5>" + company + "<br/>" + 
+            "Cost: $" + cost;
+    }    
 
 }
