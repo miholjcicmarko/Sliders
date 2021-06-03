@@ -78,7 +78,12 @@ class visuals {
 
         for (let i = 0; i < this.dataValues.length; i++) {
             if (this.dataValues[i]["numberOfSwipes"] === number) {
-                dataBar.push(this.dataValues[i]);
+                let node = {
+                    "NumberOfSwipes": i,
+                    "Zions": this.dataValues[i]["zions"],
+                    "Others": this.dataValues[i]["others"]
+                };
+                dataBar.push(node);
             }
         }
 
@@ -87,6 +92,10 @@ class visuals {
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
         let barpadding = 1;
+
+
+
+
 
         let x_lab = d3.scaleBand()
                         .domain(["Zions", "Others"])
