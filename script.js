@@ -12,6 +12,15 @@ let preProcessData = loadData();
 Promise.all([preProcessData]).then(data => {
 
     let preData = data[0];
+    this.activeNumber = 1;
 
-    let bars = new visuals(preData);
+    let that = this;
+
+    function updateNumber (number) {
+        that.activeNumber = number;
+        bars.updateChart(number);
+    }
+
+
+    let bars = new visuals(preData, updateNumber);
 })
