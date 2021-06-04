@@ -51,7 +51,7 @@ class visuals {
             .append('div').classed('slider-label', true)
             .append('svg').attr("id", "slider-text");
 
-        if (this.activeNumber !== null || this.reset === true || this.activeNumber === null) {
+        if (this.activeNumber !== null) {
         let sliderText = sliderLabel.append('text')
             .text(this.activeNumber);
 
@@ -170,11 +170,11 @@ class visuals {
     updateChart (number) {
         let that = this;
 
-        this.shotData = this.resetData;
-
         d3.selectAll(".tooltip").remove();
 
         let new_num = +number;
+
+        this.activeNumber = new_num;
 
         this.drawBars(new_num, true);
 
@@ -214,7 +214,8 @@ class visuals {
         let cost = data.currentTarget.__data__.value;
 
         return "<h5>" + company + "<br/>" + 
-            "Cost: $" + cost;
+            "Cost: $" + cost + "<br/>" + 
+            "Amount of Swipes: " + this.activeNumber;
 
     }    
 
